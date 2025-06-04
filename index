@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Autorisation Enedis</title>
+</head>
+<body>
+  <h1>Formulaire d'autorisation Enedis</h1>
+  <form id="enedis-form">
+    <label>Nom : <input type="text" name="nom" required></label><br>
+    <label>Prénom : <input type="text" name="prenom" required></label><br>
+    <label>Adresse : <input type="text" name="adresse" required></label><br>
+    <label>
+      <input type="checkbox" name="consentement" required>
+      J’autorise Enedis à accéder à mes données de consommation
+    </label><br><br>
+    <button type="submit">Générer l'autorisation</button>
+  </form>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+    document.getElementById("enedis-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const form = new FormData(e.target);
+      const nom = form.get("nom");
+      const prenom = form.get("prenom");
+      const adresse = form.get("adresse");
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.setFontSize(12);
+      doc.text(`Autorisation d’accès aux données Enedis`, 10, 20);
+      doc.text(`Je soussigné(e) ${prenom} ${nom}, demeurant au ${adresse},`, 10, 30);
+      doc.text(`autorise Enedis à accéder à mes données de consommation électrique.`, 10, 40);
+      doc.text(`Fait le : ${new Date().toLocaleDateString()}`, 10, 50);
+      doc.save("autorisation_enedis.pdf");
+    });
+  </script>
+</body>
+</html>
