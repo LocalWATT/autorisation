@@ -92,14 +92,16 @@
     <!-- Cadre 2 : Point de Livraison -->
     <div class="form-section" id="section-pdl">
       <h2>PDL</h2>
-      <label>Numéro du PDL : <input type="text" name="pdl" required></label>
-      <label>Adresse du PDL : <input type="text" name="adressePdl" required></label>
-      <label>Titulaire : <input type="text" name="titulaire" required></label>
+      <label>Numéro du PDL : <input type="text" name="pdl"></label>
+      <label>Adresse du PDL : <input type="text" name="adressePdl"></label>
+      <label>Titulaire : <input type="text" name="titulaire"></label>
+      <label><input type="checkbox" name="habilitation" required> Le signataire du présent formulaire déclare être dûment habilité par le client pour la signature du présent document. </label>
     </div>
 
     <!-- Cadre 3 : Données -->
     <div class="form-section" id="section-donnees">
       <h2>Données demandées (cochez toutes les cases)</h2>
+      <label>Je donne </label>
       <label><input type="checkbox" name="donnees" value="mesures" required> L’historique des mesures, en kWh, du site (et puissances atteintes et dépassements de puissance)</label>
       <label><input type="checkbox" name="donnees" value="indexquotidien" required> L’historique des relevés d’index quotidiens, en kWh, et la puissance maximale quotidienne, en kVA ou kWh, du site</label>
       <label><input type="checkbox" name="donnees" value="courbe" required> L’historique de courbe de charge, au pas restitué par Enedis, du site</label>
@@ -143,8 +145,10 @@
 
       const nom = data.get('nom');
       const prenom = data.get('prenom');
+      const email = data.get('email');
       doc.text(`Nom: ${nom}`, 10, y); y += 7;
       doc.text(`Prénom: ${prenom}`, 10, y); y += 7;
+      doc.text(`Prénom: ${email}`, 10, y); y += 7;
 
       if (repOrgCheckbox.checked) {
         doc.text('Représente une organisation', 10, y); y += 7;
