@@ -179,20 +179,20 @@
       const pdfBlob = doc.output('blob');
       const pdfFile = new File([pdfBlob], 'autorisation_enedis.pdf', { type: 'application/pdf' });
 
-      // Envoyer par email avec EmailJS (remplacez SERVICE_ID & TEMPLATE_ID)
+      // Télécharger le PDF côté client
+      doc.save('autorisation_enedis.pdf');
+
+      // Envoyer email simple (nom, date, email)
       try {
         await emailjs.send("service_1um4jro", "template_0jsu9bc", {
           name: `${prenom} ${nom}`,
-          time: new Date().toLocaleString(),
-          email: `${email}`
+          email: email,
+          time: new Date().toLocaleString()
         });
-        }, {
-          attachment: pdfFile
-        });
-        alert('PDF envoyé avec succès');
-      } catch (err) {
-        console.error(err);
-        alert('Erreur lors de l\'envoi de l\'email.');
+        alert("Email envoyé avec succès !");
+      } catch (error) {
+        console.error("Erreur lors de l'envoi de l'email :", error);
+        alert("Erreur lors de l'envoi de l'email.");
       }
     });
   </script>
