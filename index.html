@@ -3,105 +3,154 @@
 <head>
   <meta charset="UTF-8">
   <title>Autorisation Enedis</title>
+  <!-- Utilisation de la police Aptos (ou fallback Segoe UI si non disponible) -->
   <style>
-    /* Affichage conditionnel du bloc organisation */
-    .org-fields {
-      display: none;
-      border: 1px solid #ccc;
-      padding: 10px;
-      margin-top: 10px;
+    @font-face {
+      font-family: "Aptos";
+      src: local("Aptos"), local("Segoe UI"), local("Helvetica Neue"), local("Arial"), sans-serif;
     }
+    body {
+      font-family: "Aptos", "Segoe UI", sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+    }
+
+    img.logo {
+      max-width: 220px;
+      height: auto;
+      margin-bottom: 20px;
+    }
+
+    .intro {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+    }
+
+    /* Cadres */
+    fieldset.box {
+      border: 2px solid #0078d4;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 10px;
+      min-width: 280px;
+      max-width: 400px;
+    }
+    fieldset.box legend {
+      font-weight: bold;
+      padding: 0 10px;
+    }
+
+    .container-boxes {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    button {
+      background-color: #0078d4;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 24px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 30px;
+    }
+    button:hover { opacity: 0.9; }
+
+    /* Champs organisation masqués par défaut */
+    .org-fields { display: none; margin-top: 10px; text-align: left; }
   </style>
 </head>
 <body>
-  <h1>Formulaire d'autorisation Enedis</h1>
+  <!-- Remplace logo.png par l'image que tu ajouteras dans le dépôt -->
+  <img src="logo.png" alt="Logo LocalWATT" class="logo">
+
+  <p class="intro">Donnez votre accord pour que LocalWATT récolte vos données auprès d'Enedis.</p>
+
   <form id="enedis-form">
-    <!-- Informations sur le signataire -->
-    <label>Nom (signataire) : <input type="text" name="nom" required></label><br>
-    <label>Prénom (signataire) : <input type="text" name="prenom" required></label><br>
+    <div class="container-boxes">
 
-    <!-- Représentation d'une organisation -->
-    <label>
-      <input type="checkbox" id="is-org" name="isOrg">
-      Le signataire représente une organisation professionnelle ou publique
-    </label><br>
+      <!-- Cadre Signataire -->
+      <fieldset class="box" id="box-signataire">
+        <legend>Signataire</legend>
+        <label>Nom&nbsp;:<br><input type="text" name="nom" required></label><br><br>
+        <label>Prénom&nbsp;:<br><input type="text" name="prenom" required></label><br><br>
+        <label><input type="checkbox" id="is-org" name="isOrg"> Représentant d'une organisation</label>
 
-    <!-- Bloc affiché uniquement si le signataire représente une organisation -->
-    <div id="org-fields" class="org-fields">
-      <p><strong>Informations sur l'organisation</strong></p>
-      <label>Nom de l'organisation : <input type="text" name="org_nom"></label><br>
-      <label>SIRET : <input type="text" name="org_siret" pattern="\d{14}" title="14 chiffres"></label><br>
-      <label>Adresse : <input type="text" name="org_adresse"></label><br>
-      <label>Code postal : <input type="text" name="org_cp" pattern="\d{5}" title="5 chiffres"></label><br>
-      <label>Commune : <input type="text" name="org_commune"></label><br>
+        <div class="org-fields" id="org-fields">
+          <br>
+          <label>Organisation&nbsp;:<br><input type="text" name="organisation"></label><br><br>
+          <label>SIRET&nbsp;:<br><input type="text" name="siret"></label><br><br>
+          <label>Adresse&nbsp;:<br><input type="text" name="org_adresse"></label><br><br>
+          <label>Code&nbsp;postal&nbsp;:<br><input type="text" name="org_cp"></label><br><br>
+          <label>Commune&nbsp;:<br><input type="text" name="org_commune"></label><br><br>
+        </div>
+        <br>
+        <label><input type="checkbox" name="habilitation"> Le signataire du formulaire déclare être dûment habilité par le client pour la signature du présent document.</label>
+      </fieldset>
+
+      <!-- Cadre PDL -->
+      <fieldset class="box" id="box-pdl">
+        <legend>PDL</legend>
+        <label>Point de Livraison (PDL ou PRM)&nbsp;:<br><input type="text" name="pdl" required></label>
+      </fieldset>
+
+      <!-- Cadre Données -->
+      <fieldset class="box" id="box-donnees">
+        <legend>Données</legend>
+        <label><input type="checkbox" name="donnee_conso" required> Données de consommation</label><br>
+        <label><input type="checkbox" name="donnee_puissance"> Données de puissance</label><br>
+        <label><input type="checkbox" name="donnee_autres"> Autres données</label>
+      </fieldset>
+
     </div>
 
-    <!-- Consentement Enedis -->
-    <label>
-      <input type="checkbox" name="consentement" required>
-      J’autorise Enedis à accéder à mes données de consommation
-    </label><br>
-
-    <!-- Habilitation -->
-    <label>
-      <input type="checkbox" name="habilitation">
-      Le signataire du formulaire déclare être dûment habilité par le client pour la signature du présent document
-    </label><br><br>
-
-    <button type="submit">Générer l'autorisation</button>
+    <button type="submit">Je donne mon consentement</button>
   </form>
 
-  <p style="font-size: 0.9em; color: gray;">
-    🔒 Les informations saisies ne sont ni stockées ni envoyées. Le document est généré localement dans votre navigateur.
-  </p>
-
+  <!-- jsPDF pour générer le PDF côté client -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script>
-    // Gestion de l'affichage conditionnel du bloc organisation
+    // Affichage dynamique des champs organisation
     const isOrgCheckbox = document.getElementById('is-org');
-    const orgFieldsDiv   = document.getElementById('org-fields');
-
+    const orgFields = document.getElementById('org-fields');
     isOrgCheckbox.addEventListener('change', () => {
-      orgFieldsDiv.style.display = isOrgCheckbox.checked ? 'block' : 'none';
+      orgFields.style.display = isOrgCheckbox.checked ? 'block' : 'none';
     });
 
     // Génération du PDF
     document.getElementById('enedis-form').addEventListener('submit', function (e) {
       e.preventDefault();
       const form = new FormData(e.target);
-
-      const nom        = form.get('nom');
-      const prenom     = form.get('prenom');
-      const isOrg      = isOrgCheckbox.checked;
-      const orgNom     = form.get('org_nom');
-      const orgSiret   = form.get('org_siret');
-      const orgAdresse = form.get('org_adresse');
-      const orgCp      = form.get('org_cp');
-      const orgCommune = form.get('org_commune');
-      const habilite   = form.get('habilitation') === 'on';
-
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
-      let y = 20;
-
       doc.setFontSize(12);
-      doc.text('Autorisation d’accès aux données Enedis', 10, y); y += 10;
-      doc.text(`Je soussigné(e) ${prenom} ${nom},`, 10, y); y += 10;
 
-      if (isOrg) {
-        doc.text(`représentant(e) l'organisation : ${orgNom}`, 10, y); y += 8;
-        doc.text(`SIRET : ${orgSiret}`, 10, y); y += 8;
-        doc.text(`Adresse : ${orgAdresse}`, 10, y); y += 8;
-        doc.text(`Code postal : ${orgCp}   Commune : ${orgCommune}`, 10, y); y += 10;
+      const nom = form.get('nom');
+      const prenom = form.get('prenom');
+      const pdl = form.get('pdl');
+      const today = new Date().toLocaleDateString();
+
+      doc.text("Autorisation d'accès aux données Enedis", 10, 20);
+
+      if (isOrgCheckbox.checked) {
+        const orgName = form.get('organisation');
+        const siret = form.get('siret');
+        const adresseOrg = form.get('org_adresse');
+        doc.text(`Je soussigné(e) ${prenom} ${nom}, représentant(e) de ${orgName} (SIRET: ${siret})`, 10, 30);
+        doc.text(`Adresse: ${adresseOrg}`, 10, 40);
+      } else {
+        doc.text(`Je soussigné(e) ${prenom} ${nom}`, 10, 30);
       }
 
-      doc.text('Autorise Enedis à accéder à mes données de consommation électrique.', 10, y); y += 10;
-
-      if (habilite) {
-        doc.text('Le signataire déclare être dûment habilité par le client pour la signature du présent document.', 10, y); y += 10;
-      }
-
-      doc.text(`Fait le : ${new Date().toLocaleDateString()}`, 10, y);
+      doc.text(`Autorise Enedis à transmettre à LocalWATT les données liées au PDL/PRM: ${pdl}.`, 10, 50);
+      doc.text(`Fait le : ${today}`, 10, 60);
 
       doc.save('autorisation_enedis.pdf');
     });
