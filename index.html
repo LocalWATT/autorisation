@@ -16,8 +16,17 @@
       text-align: center;
       padding: 20px;
     }
+    img {
+      max-width: 220px;
+      margin-bottom: 10px;
+    }
+    p.intro {
+      font-size: 12px;
+      margin-top: 0;
+      margin-bottom: 20px;
+    }
     .form-section {
-      border: 1px solid #aaa;
+      border: 1px solid #888;
       padding: 15px;
       margin: 10px 0;
       width: 100%;
@@ -25,115 +34,160 @@
     }
     .form-section h2 {
       margin-top: 0;
+      margin-bottom: 10px;
     }
     label {
       display: block;
-      margin: 8px 0;
+      margin: 6px 0;
       text-align: left;
     }
-    input[type="text"], input[type="number"], input[type="checkbox"] {
+    input[type="text"], input[type="number"] {
       width: 100%;
       padding: 6px;
-      margin-top: 4px;
+      margin-top: 3px;
       box-sizing: border-box;
     }
     button {
-      padding: 10px 20px;
+      padding: 10px 25px;
       font-size: 16px;
       margin-top: 20px;
       cursor: pointer;
     }
   </style>
+  <!-- EmailJS SDK for sending email with attachment -->
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <script>
+    // Initialise EmailJS (remplacez VOTRE_PUBLIC_KEY par votre clé)
+    (function(){
+      emailjs.init("-jkm7kb0s8S9uJge7");
+    })();
+  </script>
 </head>
 <body>
-  <img src="localwatt logo .png" alt="Logo LocalWATT" style="max-width: 200px; margin-bottom: 10px;">
-  <p><strong>Donnez votre accord pour que LocalWATT récolte vos données auprès d'Enedis.</strong></p>
+  <!-- Logo centré -->
+  <img src="logo.png" alt="Logo LocalWATT">
 
-  <form id="enedis-form">
+  <!-- Texte introductif -->
+  <p class="intro"><strong>Donnez votre accord pour que LocalWATT récolte vos données auprès d'Enedis.</strong></p>
 
-    <div class="form-section">
+  <form id="consent-form">
+
+    <!-- Cadre 1 : Signataire -->
+    <div class="form-section" id="section-signataire">
       <h2>Signataire</h2>
-      <label>Êtes-vous un représentant d'une organisation professionnelle ou publique ?</label>
-      <label><input type="radio" name="estOrganisation" value="oui" required> Oui</label>
-      <label><input type="radio" name="estOrganisation" value="non"> Non</label>
-    </div>
-
-    <div id="champs-organisation" class="form-section" style="display: none;">
-      <h2>Informations - Organisation</h2>
       <label>Nom du signataire : <input type="text" name="nom" required></label>
       <label>Prénom du signataire : <input type="text" name="prenom" required></label>
-      <label>Nom de l'organisation : <input type="text" name="organisation" required></label>
-      <label>SIRET : <input type="text" name="siret" required></label>
-      <label>Adresse : <input type="text" name="adresse" required></label>
-      <label>Code postal : <input type="text" name="codepostal" required></label>
-      <label>Commune : <input type="text" name="commune" required></label>
+      <label><input type="checkbox" id="repOrg"> Je représente une organisation/entreprise/collectivité</label>
+      <div id="org-fields" style="display:none; margin-top:10px;">
+        <label>Nom de l'organisation : <input type="text" name="organisation"></label>
+        <label>SIRET : <input type="text" name="siret"></label>
+        <label>Adresse de l'organisation : <input type="text" name="adresseOrg"></label>
+      </div>
+      <div id="indiv-address" style="margin-top:10px;">
+        <label>Adresse du signataire : <input type="text" name="adressePers"></label>
+      </div>
     </div>
 
-    <div id="champs-individuel" class="form-section" style="display: none;">
-      <h2>Informations - Particulier</h2>
-      <label>Nom : <input type="text" name="nom" required></label>
-      <label>Prénom : <input type="text" name="prenom" required></label>
-      <label>Adresse : <input type="text" name="adresse" required></label>
-      <label>Code postal : <input type="text" name="codepostal" required></label>
-      <label>Commune : <input type="text" name="commune" required></label>
-    </div>
-
-    <div class="form-section">
+    <!-- Cadre 2 : Point de Livraison -->
+    <div class="form-section" id="section-pdl">
       <h2>PDL</h2>
-      <label>Point De Livraison (PDL) : <input type="text" name="pdl" required></label>
+      <label>Numéro du PDL : <input type="text" name="pdl" required></label>
+      <label>Adresse du PDL : <input type="text" name="adressePdl" required></label>
+      <label>Titulaire : <input type="text" name="titulaire" required></label>
     </div>
 
-    <div class="form-section">
-      <h2>Données</h2>
-      <label>
-        <input type="checkbox" name="consentement" required>
-        Le signataire autorise LocalWATT à récupérer les données de consommation électrique auprès d'Enedis
-      </label>
-      <label>
-        <input type="checkbox" name="habilitation">
-        Le signataire du formulaire déclare être dûment habilité par le client pour la signature du présent document.
-      </label>
+    <!-- Cadre 3 : Données -->
+    <div class="form-section" id="section-donnees">
+      <h2>Données demandées (cochez toutes les cases)</h2>
+      <label><input type="checkbox" name="donnees" value="mesures" required> L’historique des mesures, en kWh, du site (et puissances atteintes et dépassements de puissance)</label>
+      <label><input type="checkbox" name="donnees" value="indexquotidien" required> L’historique des relevés d’index quotidiens, en kWh, et la puissance maximale quotidienne, en kVA ou kWh, du site</label>
+      <label><input type="checkbox" name="donnees" value="courbe" required> L’historique de courbe de charge, au pas restitué par Enedis, du site</label>
+      <label><input type="checkbox" name="donnees" value="technique" required> Les données techniques et contractuelles disponibles du site</label>
     </div>
 
+    <!-- Bouton de soumission -->
     <button type="submit">Je donne mon consentement</button>
   </form>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script>
-    const form = document.getElementById(\"enedis-form\");
-    const organisationFields = document.getElementById(\"champs-organisation\");
-    const individuelFields = document.getElementById(\"champs-individuel\");
+    const repOrgCheckbox = document.getElementById('repOrg');
+    const orgFields = document.getElementById('org-fields');
+    const indivAddress = document.getElementById('indiv-address');
 
-    document.querySelectorAll('input[name="estOrganisation"]').forEach(radio => {
-  radio.addEventListener("change", () => {
-    if (radio.value === "oui") {
-      organisationFields.style.display = "block";
-      individuelFields.style.display = "none";
-    } else {
-      organisationFields.style.display = "none";
-      individuelFields.style.display = "block";
-    }
-  });
-});
+    repOrgCheckbox.addEventListener('change', () => {
+      if (repOrgCheckbox.checked) {
+        orgFields.style.display = 'block';
+        indivAddress.style.display = 'none';
+        // Rendre adressePers non requise, org adresse non requise (déjà non), etc.
+        document.querySelector('input[name="adressePers"]').required = false;
+      } else {
+        orgFields.style.display = 'none';
+        indivAddress.style.display = 'block';
+        document.querySelector('input[name="adressePers"]').required = true;
+      }
+    });
 
-    form.addEventListener(\"submit\", function(e) {
+    // Soumission du formulaire
+    document.getElementById('consent-form').addEventListener('submit', async function (e) {
       e.preventDefault();
-      const data = new FormData(form);
+
+      const data = new FormData(this);
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
+      let y = 10;
       doc.setFontSize(12);
-      const type = data.get(\"estOrganisation\");
-      if (type === \"oui\") {
-        doc.text(`Je soussigné(e) ${data.get(\"prenom\")} ${data.get(\"nom\")}, représentant(e) de l'organisation ${data.get(\"organisation\")}, SIRET ${data.get(\"siret\")}, située au ${data.get(\"adresse\")}, ${data.get(\"codepostal\")} ${data.get(\"commune\")},`, 10, 20);
+
+      doc.text('Autorisation de collecte de données Enedis', 10, y); y += 10;
+
+      const nom = data.get('nom');
+      const prenom = data.get('prenom');
+      doc.text(`Nom: ${nom}`, 10, y); y += 7;
+      doc.text(`Prénom: ${prenom}`, 10, y); y += 7;
+
+      if (repOrgCheckbox.checked) {
+        doc.text('Représente une organisation', 10, y); y += 7;
+        doc.text(`Organisation: ${data.get('organisation') || ''}`, 10, y); y += 7;
+        doc.text(`SIRET: ${data.get('siret') || ''}`, 10, y); y += 7;
+        doc.text(`Adresse org.: ${data.get('adresseOrg') || ''}`, 10, y); y += 7;
       } else {
-        doc.text(`Je soussigné(e) ${data.get(\"prenom\")} ${data.get(\"nom\")}, demeurant au ${data.get(\"adresse\")}, ${data.get(\"codepostal\")} ${data.get(\"commune\")},`, 10, 20);
+        doc.text('Ne représente pas d\'organisation', 10, y); y += 7;
+        doc.text(`Adresse signataire: ${data.get('adressePers') || ''}`, 10, y); y += 7;
       }
-      doc.text(`autorise LocalWATT à accéder à mes données de consommation via Enedis.`, 10, 40);
-      if (data.get(\"habilitation\")) {
-        doc.text(`Le signataire déclare être dûment habilité par le client pour la signature du présent document.`, 10, 50);
+
+      // PDL
+      doc.text(`PDL: ${data.get('pdl')}`, 10, y); y += 7;
+      doc.text(`Adresse PDL: ${data.get('adressePdl')}`, 10, y); y += 7;
+      doc.text(`Titulaire: ${data.get('titulaire')}`, 10, y); y += 10;
+
+      // Données
+      doc.text('Données demandées:', 10, y); y += 7;
+      ['mesures','indexquotidien','courbe','technique'].forEach(val => {
+        if (data.getAll('donnees').includes(val)) {
+          doc.text(`- ${val}`, 12, y); y += 6;
+        }
+      });
+
+      doc.text(`Date: ${new Date().toLocaleDateString()}`, 10, y);
+
+      // Générer PDF en blob
+      const pdfBlob = doc.output('blob');
+      const pdfFile = new File([pdfBlob], 'autorisation_enedis.pdf', { type: 'application/pdf' });
+
+      // Envoyer par email avec EmailJS (remplacez SERVICE_ID & TEMPLATE_ID)
+      try {
+        await emailjs.send("SERVICE_ID", "TEMPLATE_ID", {
+          nom,
+          prenom,
+          email_to: "destinataire@example.com" // adresse de réception
+        }, {
+          attachment: pdfFile
+        });
+        alert('PDF envoyé avec succès');
+      } catch (err) {
+        console.error(err);
+        alert('Erreur lors de l\'envoi de l\'email.');
       }
-      doc.text(`Fait le : ${new Date().toLocaleDateString()}`, 10, 60);
-      doc.save(\"autorisation_enedis.pdf\");
     });
   </script>
 </body>
