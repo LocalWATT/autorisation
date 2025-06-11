@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <title>Autorisation Enedis</title>
-  <!-- Utilisation de la police Aptos (ou fallback Segoe UI si non disponible) -->
   <style>
     @font-face {
-      font-family: "Aptos";
+      font-family: "Helvetica Neue";
       src: local("Aptos"), local("Segoe UI"), local("Helvetica Neue"), local("Arial"), sans-serif;
     }
     body {
@@ -15,144 +14,126 @@
       flex-direction: column;
       align-items: center;
       text-align: center;
-      margin: 0;
       padding: 20px;
     }
-
-    img.logo {
-      max-width: 220px;
-      height: auto;
-      margin-bottom: 20px;
+    .form-section {
+      border: 1px solid #aaa;
+      padding: 15px;
+      margin: 10px 0;
+      width: 100%;
+      max-width: 600px;
     }
-
-    .intro {
-      font-size: 1.2rem;
-      margin-bottom: 30px;
+    .form-section h2 {
+      margin-top: 0;
     }
-
-    /* Cadres */
-    fieldset.box {
-      border: 2px solid #0078d4;
-      border-radius: 8px;
-      padding: 20px;
-      margin: 10px;
-      min-width: 280px;
-      max-width: 400px;
+    label {
+      display: block;
+      margin: 8px 0;
+      text-align: left;
     }
-    fieldset.box legend {
-      font-weight: bold;
-      padding: 0 10px;
+    input[type="text"], input[type="number"], input[type="checkbox"] {
+      width: 100%;
+      padding: 6px;
+      margin-top: 4px;
+      box-sizing: border-box;
     }
-
-    .container-boxes {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 20px;
-    }
-
     button {
-      background-color: #0078d4;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      padding: 12px 24px;
-      font-size: 1rem;
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-top: 20px;
       cursor: pointer;
-      margin-top: 30px;
     }
-    button:hover { opacity: 0.9; }
-
-    /* Champs organisation masqués par défaut */
-    .org-fields { display: none; margin-top: 10px; text-align: left; }
   </style>
 </head>
 <body>
-  <!-- Remplace logo.png par l'image que tu ajouteras dans le dépôt -->
-  <img src="logo.png" alt="Logo LocalWATT" class="logo">
-
-  <p class="intro">Donnez votre accord pour que LocalWATT récolte vos données auprès d'Enedis.</p>
+  <img src="localwatt logo .png" alt="Logo LocalWATT" style="max-width: 200px; margin-bottom: 10px;">
+  <p><strong>Donnez votre accord pour que LocalWATT récolte vos données auprès d'Enedis.</strong></p>
 
   <form id="enedis-form">
-    <div class="container-boxes">
 
-      <!-- Cadre Signataire -->
-      <fieldset class="box" id="box-signataire">
-        <legend>Signataire</legend>
-        <label>Nom&nbsp;:<br><input type="text" name="nom" required></label><br><br>
-        <label>Prénom&nbsp;:<br><input type="text" name="prenom" required></label><br><br>
-        <label><input type="checkbox" id="is-org" name="isOrg"> Représentant d'une organisation</label>
+    <div class="form-section">
+      <h2>Signataire</h2>
+      <label>Êtes-vous un représentant d'une organisation professionnelle ou publique ?</label>
+      <label><input type="radio" name="estOrganisation" value="oui" required> Oui</label>
+      <label><input type="radio" name="estOrganisation" value="non"> Non</label>
+    </div>
 
-        <div class="org-fields" id="org-fields">
-          <br>
-          <label>Organisation&nbsp;:<br><input type="text" name="organisation"></label><br><br>
-          <label>SIRET&nbsp;:<br><input type="text" name="siret"></label><br><br>
-          <label>Adresse&nbsp;:<br><input type="text" name="org_adresse"></label><br><br>
-          <label>Code&nbsp;postal&nbsp;:<br><input type="text" name="org_cp"></label><br><br>
-          <label>Commune&nbsp;:<br><input type="text" name="org_commune"></label><br><br>
-        </div>
-        <br>
-        <label><input type="checkbox" name="habilitation"> Le signataire du formulaire déclare être dûment habilité par le client pour la signature du présent document.</label>
-      </fieldset>
+    <div id="champs-organisation" class="form-section" style="display: none;">
+      <h2>Informations - Organisation</h2>
+      <label>Nom du signataire : <input type="text" name="nom" required></label>
+      <label>Prénom du signataire : <input type="text" name="prenom" required></label>
+      <label>Nom de l'organisation : <input type="text" name="organisation" required></label>
+      <label>SIRET : <input type="text" name="siret" required></label>
+      <label>Adresse : <input type="text" name="adresse" required></label>
+      <label>Code postal : <input type="text" name="codepostal" required></label>
+      <label>Commune : <input type="text" name="commune" required></label>
+    </div>
 
-      <!-- Cadre PDL -->
-      <fieldset class="box" id="box-pdl">
-        <legend>PDL</legend>
-        <label>Point de Livraison (PDL ou PRM)&nbsp;:<br><input type="text" name="pdl" required></label>
-      </fieldset>
+    <div id="champs-individuel" class="form-section" style="display: none;">
+      <h2>Informations - Particulier</h2>
+      <label>Nom : <input type="text" name="nom" required></label>
+      <label>Prénom : <input type="text" name="prenom" required></label>
+      <label>Adresse : <input type="text" name="adresse" required></label>
+      <label>Code postal : <input type="text" name="codepostal" required></label>
+      <label>Commune : <input type="text" name="commune" required></label>
+    </div>
 
-      <!-- Cadre Données -->
-      <fieldset class="box" id="box-donnees">
-        <legend>Données</legend>
-        <label><input type="checkbox" name="donnee_conso" required> Données de consommation</label><br>
-        <label><input type="checkbox" name="donnee_puissance"> Données de puissance</label><br>
-        <label><input type="checkbox" name="donnee_autres"> Autres données</label>
-      </fieldset>
+    <div class="form-section">
+      <h2>PDL</h2>
+      <label>Point De Livraison (PDL) : <input type="text" name="pdl" required></label>
+    </div>
 
+    <div class="form-section">
+      <h2>Données</h2>
+      <label>
+        <input type="checkbox" name="consentement" required>
+        Le signataire autorise LocalWATT à récupérer les données de consommation électrique auprès d'Enedis
+      </label>
+      <label>
+        <input type="checkbox" name="habilitation">
+        Le signataire du formulaire déclare être dûment habilité par le client pour la signature du présent document.
+      </label>
     </div>
 
     <button type="submit">Je donne mon consentement</button>
   </form>
 
-  <!-- jsPDF pour générer le PDF côté client -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script>
-    // Affichage dynamique des champs organisation
-    const isOrgCheckbox = document.getElementById('is-org');
-    const orgFields = document.getElementById('org-fields');
-    isOrgCheckbox.addEventListener('change', () => {
-      orgFields.style.display = isOrgCheckbox.checked ? 'block' : 'none';
+    const form = document.getElementById(\"enedis-form\");
+    const organisationFields = document.getElementById(\"champs-organisation\");
+    const individuelFields = document.getElementById(\"champs-individuel\");
+
+    form.estOrganisation.forEach(radio => {
+      radio.addEventListener(\"change\", () => {
+        if (radio.value === \"oui\") {
+          organisationFields.style.display = \"block\";
+          individuelFields.style.display = \"none\";
+        } else {
+          organisationFields.style.display = \"none\";
+          individuelFields.style.display = \"block\";
+        }
+      });
     });
 
-    // Génération du PDF
-    document.getElementById('enedis-form').addEventListener('submit', function (e) {
+    form.addEventListener(\"submit\", function(e) {
       e.preventDefault();
-      const form = new FormData(e.target);
+      const data = new FormData(form);
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
       doc.setFontSize(12);
-
-      const nom = form.get('nom');
-      const prenom = form.get('prenom');
-      const pdl = form.get('pdl');
-      const today = new Date().toLocaleDateString();
-
-      doc.text("Autorisation d'accès aux données Enedis", 10, 20);
-
-      if (isOrgCheckbox.checked) {
-        const orgName = form.get('organisation');
-        const siret = form.get('siret');
-        const adresseOrg = form.get('org_adresse');
-        doc.text(`Je soussigné(e) ${prenom} ${nom}, représentant(e) de ${orgName} (SIRET: ${siret})`, 10, 30);
-        doc.text(`Adresse: ${adresseOrg}`, 10, 40);
+      const type = data.get(\"estOrganisation\");
+      if (type === \"oui\") {
+        doc.text(`Je soussigné(e) ${data.get(\"prenom\")} ${data.get(\"nom\")}, représentant(e) de l'organisation ${data.get(\"organisation\")}, SIRET ${data.get(\"siret\")}, située au ${data.get(\"adresse\")}, ${data.get(\"codepostal\")} ${data.get(\"commune\")},`, 10, 20);
       } else {
-        doc.text(`Je soussigné(e) ${prenom} ${nom}`, 10, 30);
+        doc.text(`Je soussigné(e) ${data.get(\"prenom\")} ${data.get(\"nom\")}, demeurant au ${data.get(\"adresse\")}, ${data.get(\"codepostal\")} ${data.get(\"commune\")},`, 10, 20);
       }
-
-      doc.text(`Autorise Enedis à transmettre à LocalWATT les données liées au PDL/PRM: ${pdl}.`, 10, 50);
-      doc.text(`Fait le : ${today}`, 10, 60);
-
-      doc.save('autorisation_enedis.pdf');
+      doc.text(`autorise LocalWATT à accéder à mes données de consommation via Enedis.`, 10, 40);
+      if (data.get(\"habilitation\")) {
+        doc.text(`Le signataire déclare être dûment habilité par le client pour la signature du présent document.`, 10, 50);
+      }
+      doc.text(`Fait le : ${new Date().toLocaleDateString()}`, 10, 60);
+      doc.save(\"autorisation_enedis.pdf\");
     });
   </script>
 </body>
