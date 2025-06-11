@@ -65,7 +65,7 @@
 </head>
 <body>
   <!-- Logo centré -->
-  <img src="logo.png" alt="Logo LocalWATT">
+  <img src="localwatt logo .png" alt="Logo LocalWATT">
 
   <!-- Texte introductif -->
   <p class="intro"><strong>Donnez votre accord pour que LocalWATT récolte vos données auprès d'Enedis.</strong></p>
@@ -77,6 +77,7 @@
       <h2>Signataire</h2>
       <label>Nom du signataire : <input type="text" name="nom" required></label>
       <label>Prénom du signataire : <input type="text" name="prenom" required></label>
+      <label>E-mail du signataire : <input type="text" name="email" required></label>
       <label><input type="checkbox" id="repOrg"> Je représente une organisation/entreprise/collectivité</label>
       <div id="org-fields" style="display:none; margin-top:10px;">
         <label>Nom de l'organisation : <input type="text" name="organisation"></label>
@@ -177,9 +178,10 @@
       // Envoyer par email avec EmailJS (remplacez SERVICE_ID & TEMPLATE_ID)
       try {
         await emailjs.send("service_1um4jro", "template_0jsu9bc", {
-          nom,
-          prenom,
-          email_to: "tom@groupewattetco.com"
+          name: `${prenom} ${nom}`,
+          time: new Date().toLocaleString(),
+          email: `${email}`
+        });
         }, {
           attachment: pdfFile
         });
