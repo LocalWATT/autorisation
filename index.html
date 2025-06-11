@@ -5,7 +5,7 @@
   <title>Autorisation Enedis</title>
   <style>
     @font-face {
-      font-family: "Helvetica Neue";
+      font-family: "Aptos";
       src: local("Aptos"), local("Segoe UI"), local("Helvetica Neue"), local("Arial"), sans-serif;
     }
     body {
@@ -104,17 +104,17 @@
     const organisationFields = document.getElementById(\"champs-organisation\");
     const individuelFields = document.getElementById(\"champs-individuel\");
 
-    form.estOrganisation.forEach(radio => {
-      radio.addEventListener(\"change\", () => {
-        if (radio.value === \"oui\") {
-          organisationFields.style.display = \"block\";
-          individuelFields.style.display = \"none\";
-        } else {
-          organisationFields.style.display = \"none\";
-          individuelFields.style.display = \"block\";
-        }
-      });
-    });
+    document.querySelectorAll('input[name="estOrganisation"]').forEach(radio => {
+  radio.addEventListener("change", () => {
+    if (radio.value === "oui") {
+      organisationFields.style.display = "block";
+      individuelFields.style.display = "none";
+    } else {
+      organisationFields.style.display = "none";
+      individuelFields.style.display = "block";
+    }
+  });
+});
 
     form.addEventListener(\"submit\", function(e) {
       e.preventDefault();
